@@ -1,0 +1,59 @@
+﻿@page "/personalToDoList"
+@using Models
+@using Syncfusion.Blazor.Inputs;
+
+<h1>Personal Do List</h1>
+
+
+<SfGrid DataSource="@Todos"
+        Toolbar="@(new string[] {"Add", "Edit" ,"Delete" })">
+    <GridEvents TValue="TODOS"
+                OnActionBegin="OnActionBeginHandler"></GridEvents>
+    <GridEditSettings AllowAdding="true"
+                      AllowDeleting="true"
+                      Mode="Syncfusion.Blazor.Grids.EditMode.Dialog">
+        <Template>
+            @{
+                var todo = (context as TODOS);
+            }
+            <div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <SfTextBox @bind-Value="@(todo.Title)"
+                                   Placeholder="Title"
+                                   FloatLabelType="FloatLabelType.Always"></SfTextBox>
+                    </div>
+                </div>
+            </div>
+        </Template>
+    </GridEditSettings>
+    <GridColumns>
+        <GridColumn Field="Title"
+                    HeaderText="Title"
+                    TextAlign="TextAlign.Center"
+                    Width="50"
+                    IsPrimaryKey="true">
+        </GridColumn>
+    </GridColumns>
+</SfGrid>
+
+
+@code {
+
+    
+
+    public bool IsAddNew = false;
+
+    public List<TODOS> Todos { get; set; } = new List<TODOS>(){
+    };
+
+    private void OnActionBeginHandler(Syncfusion.Blazor.Grids.ActionEventArgs<TODOS> args)
+        => IsAddNew = args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Add);
+
+}
+
+<style>
+    .form-group .col-md-6 {
+        width: 200px;
+    }
+</style>
